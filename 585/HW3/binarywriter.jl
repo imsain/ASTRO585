@@ -1,3 +1,5 @@
 function binarywriter(array,filename)
-        @save filename array
+        file = open(filename,"w+")
+        write(file,array)
+        close(file)
 end
