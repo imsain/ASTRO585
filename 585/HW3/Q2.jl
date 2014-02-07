@@ -62,7 +62,7 @@ tic()
 binaryreader("2d.bin",512,512)
 toc()
 
-#Writing the binary file took
+#Writing the binary file took 0.008478638 seconds, and reading the binary file took 0.022514953 seconds. This is significantly faster than the previous ASCII file write/read. The file size is 2048 kb, which compared to the 2196 kb of the ASCII files is slightly lower.
 
 #2e)
 #New functions aren't really necessary given these are just one line commands with the HDF5 package.
@@ -75,7 +75,29 @@ toc()
 tic()
 @load "2e.jld"
 toc()
-#Writing the HDF5 file took 0.57352243 seconds, and reading it took 0.400507977 seconds. The writing is slower, but the read is significantly faster, by nearly 3 orders of magnitude. The file size of 2e.jld is 2,051 kb, whereas the file size of 2c_2.dat is 2196 kb, so there is a slight improvement in memory efficiency in using an HDF5 file. Nonetheless, the improvement is most obviously in the read time.
+#Writing the HDF5 file took 0.57352243 seconds, and reading it took 0.400507977 seconds. The writing is slower, but the read is significantly faster, by nearly 3 orders of magnitude. The file size of 2e.jld is 2,051 kb, whereas the file size of 2c_2.dat is 2196 kb, so there is a slight improvement in memory efficiency in using an HDF5 file. Compared to the binary file, however, it is still slower and almost insignificantly larger (by 3 kb).
 
 #2f)
+#Two final functions have been made, asciireader2(), binaryreader2(), and hdf5reader()
+include("C:\\Users\\Sai\\Documents\\GitHub\\ASTRO585\\585\\HW3\\asciireader2.jl")
+include("C:\\Users\\Sai\\Documents\\GitHub\\ASTRO585\\585\\HW3\\binaryreader2.jl")
 
+@printf("midfile (a/b/h):")
+tic()
+asciireader2("2c_2.dat",256,256)
+toc()
+tic()
+binaryreader2("2d.bin",512,512,256,256)
+toc()
+tic()
+jld = @load "2e.jld"
+return jld[256,256]
+toc()
+
+#The elapsed time for a mid-file search was for ascii, binary, and hdf5 respectively:
+#0.009123872 seconds
+#0.003393508 seconds
+#0.010101542 seconds
+
+#2g)
+#In almost every case, binary is the fastest of all. However, ASCII has the advantage in that text files can be easily opened and viewed withuot requiring a conversion through a compiler such as Julia. The unique property of HDF5 is that it can store and recall variable names as well. These properties give each file type a strength. For instance, it is best to use ASCII when debugging or when the data set is very small. It is best to use binary when the data set is extremely large. It is best to use HDF5 when dealing with many variables across multiple scripts that utilize the same variables.
